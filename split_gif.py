@@ -1,7 +1,6 @@
 """
-gif_region_splitter.py — GIF cropper from user-defined regions
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Usage: python gif_region_splitter.py <file.gif>
+Manual Usage: python gif_region_splitter.py <file.gif>
 
 Controls:
   Left click + drag   → Draw rectangle
@@ -79,7 +78,6 @@ class Splitter:
         self.frames, self.durations = load_gif_frames(gif_path)
         self.orig_w, self.orig_h = self.frames[0].size
 
-        # Fit to screen (max 1280x720)
         max_w, max_h = 1280, 720
         scale_w = max_w / self.orig_w
         scale_h = max_h / self.orig_h
@@ -88,13 +86,12 @@ class Splitter:
         self.disp_w = int(self.orig_w * self.scale)
         self.disp_h = int(self.orig_h * self.scale)
 
-        # Convert first frame to BGR for display preview
         first = self.frames[0].convert("RGB")
         arr  = np.array(first)
         self.base_img = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
         self.base_img = cv2.resize(self.base_img, (self.disp_w, self.disp_h))
 
-        self.regions: list[tuple[int,int,int,int]] = []  # Original pixels
+        self.regions: list[tuple[int,int,int,int]] = []
         self.drawing  = False
         self.start    = (0, 0)
         self.cur_end  = (0, 0)
@@ -159,7 +156,7 @@ class Splitter:
                       f"[{ox2-ox1}x{oy2-oy1}px]")
 
     def run(self):
-        win = "GIF Splitter  |  Left click and drag to draw regions"
+        win = "GIF Splitter"
         cv2.namedWindow(win, cv2.WINDOW_NORMAL)
         cv2.resizeWindow(win, self.disp_w, self.disp_h)
         cv2.setMouseCallback(win, self.on_mouse)
@@ -190,7 +187,7 @@ class Splitter:
 
     def export(self):
         if not self.regions:
-            print("  ! No regions to save. Draw a region first.")
+            print("Draw a region first.")
             return
 
         out_dir   = os.path.join(os.path.dirname(self.gif_path), f"output_splits")
@@ -204,7 +201,7 @@ class Splitter:
             x1,y1,x2,y2 = region
             print(f"  split_{i}.gif  ({x2-x1}x{y2-y1}px, {kb:.1f} KB)")
 
-        print(f"Done! {len(self.regions)} GIFs saved.\n")
+        print(f"{len(self.regions)} GIFs saved.\n")
 
 
 if __name__ == "__main__":
