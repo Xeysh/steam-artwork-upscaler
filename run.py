@@ -56,14 +56,13 @@ def steam_artwork_getter(input_gif: str, output_gif: str):
         "-y"
     ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    # İşlenecek tüm kareleri listele
     all_frames = sorted([f for f in os.listdir(input_dir) if f.startswith('frame_') and f.endswith('.png')])
     total_frames = len(all_frames)
 
     print(f"\nUpscaling {total_frames} frames with Real-ESRGAN...")
 
     spinner = ['|', '/', '-', '\\']
-    bar_length = 30 # Yükleme çubuğunun karakter uzunluğu
+    bar_length = 30
 
     for idx, filename in enumerate(all_frames, start=1):
         input_path = os.path.join(input_dir, filename)
@@ -72,22 +71,19 @@ def steam_artwork_getter(input_gif: str, output_gif: str):
 
         cmd = [exe_path, '-i', input_path, '-o', output_path, '-n', 'realesrgan-x4plus-anime']
 
-        # Real-ESRGAN arka planda çalışmaya başlar
         process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         frame_start_time = time.time()
         spinner_idx = 0
 
-        # Ekran kartı bu kareyi işlediği sürece çubuk canlı olarak dolar
         while process.poll() is None:
             elapsed_time = time.time() - frame_start_time
 
             # Zamanla ilerleyen organik render yüzdesi
             frame_percent = 100 * (1 - math.exp(-elapsed_time / 4.0))
             if frame_percent > 99:
-                frame_percent = 99  # Gerçekten bitene kadar %99'da sınırla
+                frame_percent = 99 
 
-            # CANLI PROGRESS BAR: Çubuk artık toplam kareye göre değil, anlık render yüzdesine göre dolar!
             filled_length = int(bar_length * frame_percent / 100)
             progress_bar = '█' * filled_length + '░' * (bar_length - filled_length)
 
@@ -96,7 +92,6 @@ def steam_artwork_getter(input_gif: str, output_gif: str):
             spinner_idx = (spinner_idx + 1) % len(spinner)
             time.sleep(0.1)
 
-        # Kare kesin olarak bittiğinde çubuğu ve yüzdeyi %100'e vuruyoruz
         full_bar = '█' * bar_length
         print(f"\rFrame {idx}/{total_frames} -> Progress: [{full_bar}] 100% [✓]", end="", flush=True)
         process.wait()
