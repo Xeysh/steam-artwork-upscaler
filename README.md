@@ -4,7 +4,7 @@
 [![Framework](https://img.shields.io/badge/Engine-Real--ESRGAN-orange.svg)](https://github.com/xinntao/Real-ESRGAN)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A brief project to upscale Steam artwork (`.gif` files) using advanced AI via **Real-ESRGAN**. 
+A brief project to upscale Steam artwork (`.gif` files) using **Real-ESRGAN**. 
 
 > **Default Model Note:** This project uses **`realesrgan-x4plus-anime`** by default.
 
