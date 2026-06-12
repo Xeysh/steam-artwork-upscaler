@@ -6,7 +6,8 @@
 
 A brief project to upscale Steam artwork (`.gif` files) using advanced AI via **Real-ESRGAN**. 
 
-> **Default Model Note:** This project uses **`realesrgan-x4plus-anime`** by default. It is highly optimized for anime, digital illustrations, and vector-style artworks commonly used in Steam profile designs.
+> **Default Model Note:** This project uses **`realesrgan-x4plus-anime`** by default.
+
 ## Prerequisites & Installation
 
 ### Step 1: Download FFmpeg & FFprobe
